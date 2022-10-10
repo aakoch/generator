@@ -1,0 +1,11 @@
+build/
+node_modules
+.nyc_output
+.DS_Store
+tmp/
+*.err
+*.expected.html
+test/in
+test/json
+test/html
+*.iml
