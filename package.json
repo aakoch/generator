@@ -1,0 +1,26 @@
+{
+  "name": "generator",
+  "version": "0.1.0",
+  "description": "HTML Generator for Foo-Dog project",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tap"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aakoch/generator.git"
+  },
+  "keywords": [
+    "foo-dog",
+    "pug"
+  ],
+  "author": "Adam Koch (aakoch)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aakoch/generator/issues"
+  },
+  "homepage": "https://github.com/aakoch/generator#readme"
+}
