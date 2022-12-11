@@ -1,3 +1,6 @@
 import tap from 'tap'
+import { Generator } from '../src/index.js'
 
-tap.pass('this is fine')
+const generator = new Generator()
+
+tap.same(generator.compile("\"input\"")(), "input")
