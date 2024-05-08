@@ -1,4 +1,13 @@
-node_modules
-build
+*.err
+*.expected.html
+*.iml
+.DS_Store
+.nyc_output
 .parcel-cache
+build
 coverage
+node_modules
+test/html
+test/in
+test/json
+tmp/
