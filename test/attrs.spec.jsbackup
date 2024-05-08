@@ -1,0 +1,156 @@
+import tap from 'tap'
+import generator from '../src/index.js'
+import evaluateUnbufferedCode from '../src/unbuf_code.js'
+
+// tap.test('es2015-attr', t => {
+//   const actual = generator.fromObject([
+//     {"source":"../test/pug/cases-es2015/attr.pug","type":"unbuf_code","val":"var avatar = '219b77f9d21de75e81851b6b886057c7'","lineNumber": 1},
+//     {"source":"../test/pug/cases-es2015/attr.pug","name":"div","type":"tag","attrs":[{"name":"class","val":"\"avatar-div\""},{"name":"style","val":"`background-image: url(https://www.gravatar.com/avatar/${avatar})`"}],"lineNumber": 3}])
+//   t.same(actual, '<div class="avatar-div" style="background-image: url(https://www.gravatar.com/avatar/219b77f9d21de75e81851b6b886057c7)"></div>')
+//   t.end()
+// })
+
+// tap.test('testing the test', t => {
+//   const actual = generator.fromObject([{"source":"stdin","type":"unbuf_code","val":"var i = 9","lineNumber": 1},
+//   {"source":"stdin","name":"p","type":"tag","assignment":true,"assignment_val":"i","lineNumber": 4
+// }])
+//   t.same(actual, '<p>9</p>')
+//   t.end()
+// })
+
+// tap.test('empty object', t => {
+//   const actual = evaluateUnbufferedCode([{}])
+//   t.same(actual, [{}])
+//   t.end()
+// })
+
+// tap.test('simple', t => {
+//   const actual = evaluateUnbufferedCode({ type: 'unbuf_code', val: 'var i = 1' }, { i: 0}) // { name: 'someAttr', assignment: true, assignment_val: 'i', children: [] }
+//   t.same(actual, { name: 'someAttr', val: 1 })
+//   t.end()
+// })
+
+// tap.test('simple arr', t => {
+//   const resolver = new AttrsResolver()
+//   const actual = resolver.resolve([{ attrs: [{ code: 'var i = 1', name: 'someAttr', val: 'i' }] }])
+//   t.same(actual, [{ attrs: [{ name: 'someAttr', val: 1 }] }])
+//   t.end()
+// })
+
+// tap.test('attr-es2015', t => {
+//   const resolver = new AttrsResolver()
+//   const actual = resolver.resolve([
+//     { "type": "code", "val": "var avatar = '219b77f9d21de75e81851b6b886057c7'", "lineNumber": 1 },
+//     { "name": "div", "type": "tag", "attrs": [{ "name": "class", "val": "\"avatar-div\"" }, { "name": "style", "val": "`background-image: url(https://www.gravatar.com/avatar/${avatar})`" }], "lineNumber": 3 }])
+//   t.same(actual, [
+//     {
+//       "source": "workspaces/lexing-transformer/test/pug/attr-es2015.pug",
+//       "name": "div",
+//       "type": "tag",
+//       "attrs": [
+//         {
+//           "name": "someAttr",
+//           "val": 1,
+//           "name": "class",
+//           "val": "avatar-div",
+//         },
+//         {
+//           "name": "style",
+//           "val": "background-image: url(https://www.gravatar.com/avatar/219b77f9d21de75e81851b6b886057c7)",
+//         },
+//       ],
+//       "lineNumber": 3,
+//     },
+//   ])
+//   t.end()
+// })
+
+// tap.test('attrs-data', t => {
+//   const resolver = new AttrResolver()
+//   const actual = resolver.resolve({ name: 'data-epoc', val: 'new Date(0)' })
+//   t.same(actual, { name: 'data-epoc', val: '1970-01-01T00:00:00.000Z' })
+//   t.end()
+// })
+
+// tap.test('include-with-text', t => {
+//   const resolver = new AttrResolver()
+//   const actual = resolver.resolve({"name":"src","val":"'/app.js'"})
+//   t.same(actual, { name: 'src', val: '/app.js' })
+//   t.end()
+// })
+
+// tap.test('include-with-text 2', t => {
+//   const resolver = new AttrsResolver()
+//   const actual = resolver.resolve([{"attrs": [
+//     {
+//       "name": "src",
+//       "val": "'/app.js'"
+//     }
+//   ]}])
+//   t.same(actual, [{ attrs: [{ name: 'src', val: '/app.js' }]}])
+//   t.end()
+// })
+
+// tap.test('tag with nothing to resolve', t => {
+//   const resolver = new AttrsResolver()
+//   const givenAndExpected = [{ type: 'tag', name: 'html' }]
+//   const actual = resolver.resolve(givenAndExpected)
+//   t.same(actual, givenAndExpected)
+//   t.end()
+// })
+
+// tap.test('attributes with nothing to resolve', t => {
+//   const resolver = new AttrsResolver()
+//   const given = [{ type: 'tag', name: 'html', 'attrs': [{name: 'class', val: '"aclass"', mustEscape: false}] }]
+//   const actual = resolver.resolve(given)
+//   t.same(actual,[
+//        {
+//         "type": "tag",
+//         "name": "html",
+//         "attrs":  [
+//            {
+//             "name": "class",
+//             "val": "aclass",
+//             "mustEscape": false,
+//           },
+//         ],
+//       },
+//     ])
+//   t.end()
+// })
+
+// tap.test('attributes with something to resolve', t => {
+//   const resolver = new AttrsResolver()
+//   const given = [
+//     { type: 'unbuf_code', val: 'var needsResolved = "candy"' },
+//     { type: 'tag', name: 'html', 'attrs': [{name: 'class', val: 'needsResolved', mustEscape: false}] }
+//   ]
+//   const actual = resolver.resolve(given)
+//   t.same(actual,[
+//        {
+//         "type": "tag",
+//         "name": "html",
+//         "attrs":  [
+//            {
+//             "name": "class",
+//             "val": "candy",
+//             "mustEscape": false,
+//           },
+//         ],
+//       },
+//     ])
+//   t.end()
+// })
+
+// tap.test(`[ { name: 'href', val: "'/contact'" } ]`, t => {
+//   const resolver = new AttrsResolver()
+//   const given = [ { name: 'href', val: "'/contact'" } ]
+//   const actual = resolver.resolve(given)
+//   t.same(actual,[
+//        {
+//         "name": "href",
+//         "val": "'/contact'"
+//       },
+//     ])
+//   t.end()
+// })

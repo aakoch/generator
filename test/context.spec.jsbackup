@@ -1,0 +1,14 @@
+import tap from 'tap'
+import generator from '../src/index.js'
+import debugFunc from 'debug'
+const debug = debugFunc('generator:test:context')
+
+const Generator = generator.Generator
+
+tap.test('generator instantiation and function "walk" exists', t => {
+  let generator = new Generator();
+  t.ok(generator)
+console.log('generator=', generator)
+  t.ok(generator.hasOwnProperty('walk'))
+  t.end()
+})

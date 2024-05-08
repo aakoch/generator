@@ -1,0 +1,63 @@
+import tap from 'tap'
+import parse from '../src/parseCode.js'
+import { simpleProjectRootDir } from '@foo-dog/utils'
+import fs from 'fs'
+import path from 'path'
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+const root = simpleProjectRootDir()
+import evaluateUnbufferedCode from '../src/unbuf_code.js'
+
+// tap.test('test unbuffered code block', t => {
+
+  tap.same(parse({
+    code: 'var i = 99',
+    val: 'i'
+  }), { i: 99 } )
+
+  tap.same(parse({
+    code: 'list = ["uno", "dos", "tres",' + '"cuatro", "cinco", "seis"];',
+    val: 'list'
+  }), { list: ["uno", "dos", "tres", "cuatro", "cinco", "seis"] } )
+
+  // tap.same(evaluateUnbufferedCode({
+      
+  //       source: '../lexing-transformer/test/pug/block-code.pug',
+  //       type: 'unbuf_code_block',
+  //       val: 'list = ["uno", "dos", "tres",',
+  //       lineNumber: 2,
+  //       children: [
+  //         {
+  //           source: '../lexing-transformer/test/pug/block-code.pug',
+  //           type: 'unbuf_code_block',
+  //           val: '"cuatro", "cinco", "seis"];',
+  //           lineNumber: 3
+  //         }
+  //       ]
+      
+  // }, {list: 0}), { list: ["uno", "dos", "tres", "cuatro", "cinco", "seis"] } )
+
+    // source: '../lexing-transformer/test/pug/block-code.pug',
+    // type: 'unbuf_code_block',
+    // lineNumber: 1,
+    // children: [
+    //   {
+    //     source: '../lexing-transformer/test/pug/block-code.pug',
+    //     type: 'unbuf_code',
+    //     val: 'list = ["uno", "dos", "tres",',
+    //     lineNumber: 2,
+    //     children: [
+    //       {
+    //         source: '../lexing-transformer/test/pug/block-code.pug',
+    //         type: 'unbuf_code',
+    //         val: '"cuatro", "cinco", "seis"];',
+    //         lineNumber: 3
+    //       }
+    //     ]
+    //   }
+    // ]
+
+
+//   t.end()
+// })

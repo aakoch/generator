@@ -1,0 +1,110 @@
+import tap from 'tap'
+import process from '../src/processCodeBlock.js'
+import { simpleProjectRootDir } from '@foo-dog/utils'
+import fs from 'fs'
+import path from 'path'
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+const root = simpleProjectRootDir()
+
+// tap.test('test unbuffered code block', t => {
+
+// tap.same(process(
+//   [
+//     {
+//       source: '../lexing-transformer/test/pug/block-code.pug',
+//       type: 'unbuf_code_block',
+//       lineNumber: 1,
+//       children: [
+//         {
+//           source: '../lexing-transformer/test/pug/block-code.pug',
+//           type: 'unbuf_code',
+//           val: 'list = ["uno", "dos", "tres",',
+//           lineNumber: 2,
+//           children: [
+//             {
+//               source: '../lexing-transformer/test/pug/block-code.pug',
+//               type: 'unbuf_code',
+//               val: '"cuatro", "cinco", "seis"];',
+//               lineNumber: 3
+//             }
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// ), {
+//   code: ['list = ["uno", "dos", "tres","cuatro", "cinco", "seis"];']
+//  } )
+
+// an unbuf_code_block without children should return an empty block
+tap.same(process([
+{
+  source: '../lexing-transformer/test/pug/block-code.pug',
+  type: 'unbuf_code_block',
+  lineNumber: 5
+}]), [{}], "should return empty block")
+
+
+// SOMEWHERE we need to throw an exception if we reach an "each" and the iterable isn't there
+// tap.throws(function() {
+//   process([
+//     {
+//       source: '../lexing-transformer/test/pug/block-code.pug',
+//       type: 'each',
+//       val: 'item in list',
+//       lineNumber: 6
+//     }
+//   ])
+// })
+
+tap.same(process([
+{
+  source: '../lexing-transformer/test/pug/block-code.pug',
+  type: 'unbuf_code_block',
+  lineNumber: 5
+},
+{
+  source: '../lexing-transformer/test/pug/block-code.pug',
+  type: 'each',
+  val: 'item in list',
+  lineNumber: 6,
+  children: [
+    {
+      source: '../lexing-transformer/test/pug/block-code.pug',
+      type: 'unbuf_code_block',
+      lineNumber: 7,
+      children: [
+        {
+          source: '../lexing-transformer/test/pug/block-code.pug',
+          type: 'unbuf_code',
+          val: 'string = item.charAt(0)',
+          lineNumber: 8,
+          children: [
+            {
+              source: '../lexing-transformer/test/pug/block-code.pug',
+              type: 'unbuf_code',
+              val: '.toUpperCase() +',
+              lineNumber: 10
+            }
+          ]
+        },
+        {
+          source: '../lexing-transformer/test/pug/block-code.pug',
+          type: 'unbuf_code',
+          val: 'item.slice(1);',
+          lineNumber: 11
+        }
+      ]
+    },
+    {
+      source: '../lexing-transformer/test/pug/block-code.pug',
+      name: 'li',
+      type: 'tag',
+      assignment: true,
+      assignment_val: 'string',
+      lineNumber: 12
+    }
+  ]
+}]), [{}])

@@ -1,0 +1,18 @@
+// import tap from 'tap'
+import generator from '../src/index.js'
+
+function testObj(input, expected, t) {
+  try {
+    const actual = generator.fromObject(input)
+    console.log('actual=', actual)
+    t.equal(actual, expected, "testing failed for " + JSON.stringify(input))
+  }
+  catch (e) {
+    console.error('Test errored: ' + e.message)
+  }
+  finally {
+    t.end()
+  }
+}
+
+export { testObj }

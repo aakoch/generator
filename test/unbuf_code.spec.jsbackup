@@ -1,0 +1,47 @@
+import tap from 'tap'
+import evaluateUnbufferedCode from '../src/unbuf_code.js'
+
+tap.same(evaluateUnbufferedCode({"source":"stdin","type":"unbuf_code","val":"if (true)","lineNumber": 10, "children":[
+  {"source":"stdin","name":"p","type":"tag","val":"foo","lineNumber": 11}]
+}, {}), '<p>foo</p>')
+
+tap.same(evaluateUnbufferedCode({"source":"stdin","type":"unbuf_code","val":"if (false)","lineNumber": 10, "children":[
+  {"source":"stdin","name":"p","type":"tag","val":"foo","lineNumber": 11}]
+}, {}), '')
+
+tap.same(evaluateUnbufferedCode([
+  {"source":"stdin","type":"unbuf_code","val":"if (false)","lineNumber": 2, "children":[
+    {"source":"stdin","name":"p","type":"tag","val":"foo","lineNumber": 3}]
+  },
+  {"source":"stdin","type":"unbuf_code","val":"else","lineNumber": 4, "children":[
+    {"source":"stdin","name":"p","type":"tag","val":"bar","lineNumber": 5
+  }]}], {}), '<p>bar</p>')
+
+  tap.same(evaluateUnbufferedCode([
+  {"source":"test/pug/code.conditionals.pug","type":"unbuf_code","val":"if (true) {","lineNumber": 7, "children":[
+    {"source":"test/pug/code.conditionals.pug","name":"p","type":"tag","val":"foo","lineNumber": 8}]
+  },
+  {"source":"test/pug/code.conditionals.pug","type":"unbuf_code","val":"} else {","lineNumber": 9, "children":[
+    {"source":"test/pug/code.conditionals.pug","name":"p","type":"tag","val":"bar","lineNumber": 10}]
+  },
+  {"source":"test/pug/code.conditionals.pug","type":"unbuf_code","val":"}","lineNumber": 11}
+], {}), '<p>foo</p>')
+
+tap.same(
+  evaluateUnbufferedCode(
+      {
+        type: "unbuf_code", val: "while (x < 6)", lineNumber: 3,
+        children: [
+          { type: "unbuf_code", val: "x++;", lineNumber: 4 },
+          { name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 5 }
+        ]
+      },
+    { x: 1 }),
+  "<li>2</li><li>3</li><li>4</li><li>5</li><li>6</li>", "Testing code as a child")
+
+
+tap.same(evaluateUnbufferedCode({"source":"stdin","type":"unbuf_code","val":"if (true)","lineNumber": 10, "children":[
+  {"source":"stdin","name":"p","type":"tag","val":"foo","lineNumber": 11}]
+}, {}), '<p>foo</p>')
+
+tap.same(evaluateUnbufferedCode('"test"'), 'test')

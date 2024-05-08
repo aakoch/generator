@@ -1,0 +1,180 @@
+import tap from 'tap'
+import generator from '../src/index.js'
+import { simpleProjectRootDir } from '@foo-dog/utils'
+import fs from 'fs'
+import path from 'path'
+import { testObj } from './fixtures.js'
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+const root = simpleProjectRootDir()
+
+function readFiles(testName) {
+  const expected = fs.readFileSync(path.resolve(root, `test/html/${testName}.expected.html`), 'utf8')
+  const input = fs.readFileSync(path.resolve(root, `test/json/${testName}.json`), 'utf8')
+  return [input, expected]
+}
+
+function testFile(testName, t) {
+  try {
+    const [input, expected] = readFiles(testName)
+    // console.log('input=', input)
+    const actual = generator.fromString(input)
+    fs.writeFileSync(path.resolve(root, `build/${testName}.actual.html`), actual)
+    t.equal(actual, expected, testName + " failed")
+  }
+  catch (e) {
+    console.error('Test "' + testName + '" errored: ' + e.message)
+  }
+}
+
+tap.test('read basic.json and validate output', childTest => {
+  testFile('basic', childTest)
+  childTest.end()
+})
+
+tap.test('read classes.json and validate output', childTest => {
+  testFile('classes', childTest)
+  childTest.end()
+})
+
+tap.test('read blanks.json and validate output', childTest => {
+  testFile('blanks', childTest)
+  childTest.end()
+})
+
+tap.test('basic link', t => {
+  testObj({
+    source: 'stdin',
+    name: 'a',
+    type: 'tag',
+    attrs: [ { name: 'href', val: 'test.html' } ],
+    lineNumber: 1
+  }, '<a href="test.html"></a>', t)
+})
+
+const fileNames = [
+'attr-es2015', 
+'attrs-data', 
+'attrs.js', 
+'attrs', 
+// 'attrs.unescaped', 
+// 'attrs2', 
+// 'basic', 
+// 'blanks', 
+// 'block-code', 
+// 'block-expansion', 
+// 'block-expansion.shorthands', 
+// 'blockquote', 
+// 'blocks-in-blocks', 
+// 'blocks-in-if', 
+// 'case-blocks', 
+// 'case', 
+// 'classes-empty', 
+// 'classes', 
+// 'code.conditionals', 
+// 'code.escape', 
+// 'code.iteration', 
+// 'code', 
+// 'comments-in-case', 
+// 'comments', 
+// 'comments.source', 
+// 'doctype.custom', 
+// 'doctype.default', 
+// 'doctype.keyword', 
+// 'each.else', 
+// 'escape-chars', 
+// 'escape-test', 
+// 'escaping-class-attribute', 
+// 'filter-in-include', 
+// 'filters-empty', 
+// 'filters.coffeescript', 
+// 'filters.custom', 
+// 'filters.include.custom', 
+// 'filters.include', 
+// 'filters.inline', 
+// 'filters.less', 
+// 'filters.markdown', 
+// 'filters.nested', 
+// 'filters.stylus', 
+// 'filters.verbatim', 
+// 'html', 
+// 'html5', 
+// 'include-extends-from-root', 
+// 'include-extends-of-common-template', 
+// 'include-extends-relative', 
+// 'include-only-text-body', 
+// 'include-only-text', 
+// 'include-with-text-head', 
+// 'include-with-text', 
+// 'include.script', 
+// 'include.yield.nested', 
+// 'includes-with-ext-js', 
+// 'includes', 
+// 'inheritance.alert-dialog', 
+// 'inheritance.defaults', 
+// 'inheritance.extend.include', 
+// 'inheritance.extend', 
+// 'inheritance.extend.mixins.block', 
+// 'inheritance.extend.mixins', 
+// 'inheritance.extend.recursive', 
+// 'inheritance.extend.whitespace', 
+// 'inheritance', 
+// 'inline-block-comment', 
+// 'inline-tag', 
+// 'intepolated-elements', 
+// 'interpolated-mixin', 
+// 'interpolation.escape', 
+// 'layout.append', 
+// 'layout.append.without-block', 
+// 'layout.multi.append.prepend.block', 
+// 'layout.prepend', 
+// 'layout.prepend.without-block', 
+// 'mixin-at-end-of-file', 
+// 'mixin-block-with-space', 
+// 'mixin-hoist', 
+// 'mixin-via-include', 
+// 'mixin.attrs', 
+// 'mixin.block-tag-behaviour', 
+// 'mixin.blocks', 
+// 'mixin.merge', 
+// 'mixins-copy', 
+// 'mixins-unused', 
+// 'mixins', 
+// 'mixins.rest-args', 
+// 'namespaces', 
+// 'nesting', 
+// 'pipeless-comments', 
+// 'pipeless-filters', 
+// 'pipeless-tag', 
+// 'pre', 
+// 'quotes', 
+// 'regression.1794', 
+// 'regression.784', 
+// 'script.whitespace', 
+// 'scripts', 
+// 'scripts.non-js', 
+// 'self-closing-html', 
+// 'single-period', 
+// 'source', 
+// 'styles', 
+// 'tag-blocks', 
+// 'tag.interpolation', 
+// 'tags.self-closing', 
+// 'template', 
+// 'test', 
+// 'text-block', 
+// 'text', 
+// 'utf8bom', 
+// 'vars', 
+// 'while', 
+// 'xml', 
+// 'yield-before-conditional-head', 
+// 'yield-before-conditional', 
+// 'yield-head', 
+// 'yield-title-head', 
+// 'yield-title', 
+// 'yield'
+]
+
+fileNames.forEach(fileName => testFile(fileName, tap))

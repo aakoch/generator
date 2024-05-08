@@ -1,0 +1,195 @@
+import tap from 'tap'
+import { compile, run } from '../src/run.js'
+import { simpleProjectRootDir } from '@foo-dog/utils'
+import debugFunc from 'debug'
+const debug = debugFunc('generator:mixin.spec')
+import fs from 'fs'
+import path from 'path'
+import { testObj } from './fixtures.js'
+const root = simpleProjectRootDir()
+
+import generator from '../src/index.js'
+// import {generate} from '../src/mixin.js'
+
+/*
+mixin header(title)
+  h1= title
+
++header("test")
+
+[
+  {
+    "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+    "type": "mixin",
+    "val": "header(title)",
+    "lineNumber": 1,
+    "children": [
+      {
+        "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+        "name": "h1",
+        "type": "tag",
+        "assignment": true,
+        "val": "title",
+        "lineNumber": 2
+      }
+    ]
+  },
+  {
+    "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+    "type": "mixin_call",
+    "name": "header",
+    "params": "\"test\"",
+    "lineNumber": 4
+  }
+]
+*/
+
+// for (const key in object) {
+//   if (Object.hasOwnProperty.call(object, key)) {
+//     const element = object[key];
+    
+//   }
+// }
+
+
+
+// debug(compile('"hi"').toString());
+// debug(run('"hi"').toString());
+
+// testObj(
+  // [
+
+// function callMixin(mixin, input) {
+//   return mixin.call(input.params)
+// }
+
+// const mixin = createMixin(
+//     {
+//       "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+//       "type": "mixin",
+//       "val": "header(title)",
+//       "lineNumber": 1,
+//       "children": [
+//         {
+//           "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+//           "name": "h1",
+//           "type": "tag",
+//           "assignment": true,
+//           "val": "title",
+//           "lineNumber": 2
+//         }
+//       ]
+//     }
+// )
+
+// let retFunc = assignmentModuleFunction({
+//   "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+//   "name": "h1",
+//   "type": "tag",
+//   "assignment": true,
+//   "val": "title",
+//   "lineNumber": 2
+// }, { title: "test" })
+// debug('retFunc=', retFunc.toString())
+// debug('retFunc("test")=', retFunc("test"))
+// tap.same(retFunc("test"), "<h1>test</h1>")
+// // {
+// //   "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+// //   "type": "mixin_call",
+// //   "name": "header",
+// //   "params": "\"test\"",
+// //   "lineNumber": 4
+// // }
+// tap.same(run("returnArray.push('<h1>' + input + '</h1>')", { input: "test" }), "<h1>test</h1>")
+  // ]
+  // , [{}], tap)
+
+const inputJsonArr = [
+    {
+      "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+      "type": "mixin",
+      "val": "header(title)",
+      "lineNumber": 1,
+      "children": [
+        {
+          "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+          "name": "h1",
+          "type": "tag",
+          "assignment": true,
+          "val": "title",
+          "lineNumber": 2
+        }
+      ]
+    },
+    {
+      "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/mixin_simple.pug",
+      "type": "mixin_call",
+      "name": "header",
+      "params": "\"test\"",
+      "lineNumber": 4
+    }
+  ]
+
+tap.same(generator.fromObject(inputJsonArr), "<h1>test</h1>")
+
+// tap.throws(function () {
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2
+//   }, [])
+// }, "Should throw an error because no var is defined yet")
+
+// tap.throws(function () {
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2
+//   }, [ 'var list = "test"' ])
+// }, {}, "Should throw an error because the var is not iterable")
+
+// tap.doesNotThrow(function () {
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2,
+//     name: "li", assignment: true, assignment_val: "item"
+//   }, [ 'var list = ["test1", "test2"]' ])
+// }, {}, "Should NOT throw an error because a var IS defined and iterable")
+
+// tap.same(
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2
+//   }, [ 'var list = ["test1", "test2"]' ]), "", "Should return an empty string since there are no children")
+
+// tap.same(
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2,
+//     children: [
+//       { name: "li", type: "tag", assignment: true, assignment_val: "item", lineNumber: 4 }
+//     ]
+//   }, [ 'var list = ["item1", "item2"]' ]), "<li>item1</li>\n<li>item2</li>", "Should return 2 HTML list item elements")
+
+// tap.same(
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2,
+//     children: [
+//       {
+//         name: "p", type: "tag", lineNumber: 4,
+//         state: 'NESTED',
+//         children: [{ name: 'span', type: 'tag', assignment: true, assignment_val: "item" }]
+//       }
+//     ]
+//   }, [ 'var list = ["item1", "item2"]' ]), "<p><span>item1</span></p>\n<p><span>item2</span></p>", "Should return 2 HTML paragraph elements with a span")

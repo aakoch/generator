@@ -1,0 +1,67 @@
+import tap from 'tap'
+import {compile, run} from '../src/tag.js'
+
+function handleChildren(children) {
+  return () => children.map(child => prepare({}, child, {}, handleChildren)).join('')  
+}
+
+function prepare(context, json, variables = {}) {
+  return run(compile(context, json, {}, handleChildren), variables).join('')
+}
+
+tap.same(prepare({}, {
+  type: 'tag',
+  name: 'li',
+  val: '10'
+  }),
+  "<li>10</li>")
+
+tap.same(prepare({}, 
+  {
+    "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/basic.pug",
+    "name": "html",
+    "type": "tag",
+    "lineNumber": 1,
+    "children": [
+      {
+        "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/basic.pug",
+        "name": "body",
+        "type": "tag",
+        "lineNumber": 2,
+        "children": [
+          {
+            "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/basic.pug",
+            "name": "h1",
+            "type": "tag",
+            "val": "Title",
+            "lineNumber": 3,
+            "depth": 3
+          }
+        ],
+        "depth": 2
+      }
+    ],
+    "depth": 1
+  }, {}), "<html><body><h1>Title</h1></body></html>")
+
+
+tap.same(prepare({}, {
+    type: 'tag',
+    name: 'li',
+    val: '10',
+    assignment: true,
+  }),
+  "<li>10</li>")
+
+
+// tap.same(
+//   assignmentModuleFunction(
+//       {
+//         type: "unbuf_code", val: "while (x < 6)", lineNumber: 3,
+//         children: [
+//           { type: "unbuf_code", val: "x++;", lineNumber: 4 },
+//           { name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 5 }
+//         ]
+//       },
+//     { x: 1 })( Object.values({ x: 1 })),
+//   "<li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li>", "Testing code as a child")

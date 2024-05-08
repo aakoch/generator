@@ -1,0 +1,23 @@
+<!-- Placeholder for block: variables-->
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>import { createApp } from "vue";
+  import App from "../components/landing";
+  import 'bootstrap'
+  import '@fortawesome/fontawesome-free/css/all.css'
+
+  const landing = createApp(App)
+  landing.mount('#landing-app')
+  <!-- Placeholder for block: head-->
+  <style type="text/scss">$primary: #406275;div.date {margin-bottom: 10px;}a {cursor: pointer;}code {white-space: pre;}.linkies {&:hover {.fa-angle-double-right {animation: moveright .5s infinite;}.fa-angle-double-left {animation: moveleft .5s infinite;}}}@keyframes moveright {from {transform: translateX(0);}to {transform: translateX(10px);}}@keyframes moveleft {from {transform: translateX(0);}to {transform: translateX(-10px);}}</style>
+</head>
+
+<body>pageheader<div class="container">
+    <h1> #{title}</h1>
+    <!-- Placeholder for block: body-->
+  </div>footer
+  <!-- Placeholder for block: body_scripts-->
+</body>
+
+</html>

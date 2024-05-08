@@ -1,0 +1,109 @@
+import tap from 'tap'
+import whileFunc from '../src/while.js'
+import { simpleProjectRootDir } from '@foo-dog/utils'
+import fs from 'fs'
+import path from 'path'
+// import { fileURLToPath } from 'url';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+const root = simpleProjectRootDir()
+import evaluateUnbufferedCode from '../src/unbuf_code.js'
+
+// tap.test('test unbuffered code block', t => {
+
+
+tap.throws(function () {
+  whileFunc({
+    source: 'test',
+    type: 'while',
+    val: 'x < 10',
+    lineNumber: 2
+  }, {})
+}, "Should throw an error because no var is defined yet")
+
+// tap.throws(function () {
+//   whileFunc({
+//     source: 'test',
+//     type: 'while',
+//     val: 'x < 10',
+//     lineNumber: 2
+//   }, { x: 0 })
+// }, {}, "Should throw an error because the condition doesn't resolve to a boolean")
+
+// tap.doesNotThrow(function () {
+//   whileFunc({
+//     source: 'test',
+//     type: 'while',
+//     val: 'x < 10',
+//     lineNumber: 2
+//   }, { list: ['item1', 'item2'] })
+// }, {}, "Should NOT throw an error because a var IS defined and iterable")
+
+tap.same(
+  whileFunc({
+    source: 'test',
+    type: 'while',
+    val: 'x < 10',
+    lineNumber: 2
+  }, { x: 0 }), "", "Should return an empty string since there are no children")
+
+// tap.same(
+//   whileFunc({
+//     source: 'test',
+//     type: 'while',
+//     val: 'x < 10',
+//     lineNumber: 2,
+//     children: [
+//       { name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 4 }
+//     ]
+//   }, { list: ['item1', 'item2'] }), "<li>item1</li>\n<li>item2</li>", "Should return 2 HTML list item elements")
+
+
+tap.same(
+  evaluateUnbufferedCode(
+      {
+        type: "unbuf_code", val: "while (x < 6)", lineNumber: 3,
+        children: [
+          { type: "code", val: "x++;", lineNumber: 4 },
+          { name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 5 }
+        ]
+      },
+    { x: 0 }),
+  "<li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li>", "Should give us something")
+
+
+
+// tap.same(
+//   whileFunc(
+//       {
+//         type: "while", val: "x < 6", lineNumber: 3,
+//         children: [
+//           { type: "code", val: "x++;", lineNumber: 4 },
+//           { name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 5 }
+//         ]
+//       },
+//     { x: 1 }),
+//   "<li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li>", "Should give us something")
+
+    // source: '../lexing-transformer/test/pug/block-code.pug',
+    // type: 'unbuf_code_block',
+    // lineNumber: 1,
+    // children: [
+    //   {
+    //     source: '../lexing-transformer/test/pug/block-code.pug',
+    //     type: 'unbuf_code',
+    //     val: 'list = ["uno", "dos", "tres",',
+    //     lineNumber: 2,
+    //     children: [
+    //       {
+    //         source: '../lexing-transformer/test/pug/block-code.pug',
+    //         type: 'unbuf_code',
+    //         val: '"cuatro", "cinco", "seis"];',
+    //         lineNumber: 3
+    //       }
+    //     ]
+    //   }
+    // ]
+
+//   t.end()
+// })

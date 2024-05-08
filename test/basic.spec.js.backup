@@ -1,0 +1,117 @@
+import tap from 'tap'
+// import { simpleProjectRootDir } from '@foo-dog/utils'
+// import fs from 'fs'
+// import path from 'path'
+// const root = simpleProjectRootDir()
+import generator from '../src/index.js'
+import debugFunc from 'debug'
+const debug = debugFunc('generator:test:basic')
+
+const Generator = generator.Generator
+
+tap.test('generator instantiation and function "walk" exists', t => {
+  let generator = new Generator();
+  t.ok(generator)
+console.log('generator=', generator)
+  t.ok(generator.hasOwnProperty('walk'))
+  t.end()
+})
+
+
+function generateHtml(inputJson) {
+  return "";
+}
+
+tap.test('generator instantiation and function "walk" exists', t => {
+const inputJson = `[
+  {
+    "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/basic.pug", 
+    "name": "html", 
+    "type": "tag", 
+    "lineNumber": 1, 
+    "children": [
+      {
+        "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/basic.pug", 
+        "name": "body", 
+        "type": "tag", 
+        "lineNumber": 2, 
+        "children": [
+          {
+            "source": "/Users/aakoch/projects/new-foo/workspaces/lexing-transformer/build/in/basic.pug", 
+            "name": "h1", 
+            "type": "tag", 
+            "val": "Title", 
+            "lineNumber": 3
+          }
+        ]
+      }
+    ]
+  }
+]`;
+
+console.log('generator=', generator)
+t.same("h", "<html><body><h1>Title</h1></body></html>");
+t.end()
+})
+
+// // tap.throws(function () {
+// //   each({
+// //     source: 'test',
+// //     type: 'each',
+// //     val: 'item in list',
+// //     lineNumber: 2
+// //   }, [])
+// // }, "Should throw an error because no var is defined yet")
+
+// // tap.throws(function () {
+// //   each({
+// //     source: 'test',
+// //     type: 'each',
+// //     val: 'item in list',
+// //     lineNumber: 2
+// //   }, [ 'var list = "test"' ])
+// // }, {}, "Should throw an error because the var is not iterable")
+
+// tap.doesNotThrow(function () {
+//   each({
+//     source: 'test',
+//     type: 'each',
+//     val: 'item in list',
+//     lineNumber: 2,
+//     name: "li", assignment: true, assignment_val: "item"
+//   }, [ 'var list = ["test1", "test2"]' ])
+// }, {}, "Should NOT throw an error because a var IS defined and iterable")
+
+// // tap.same(
+// //   each({
+// //     source: 'test',
+// //     type: 'each',
+// //     val: 'item in list',
+// //     lineNumber: 2
+// //   }, [ 'var list = ["test1", "test2"]' ]), "", "Should return an empty string since there are no children")
+
+// // tap.same(
+// //   each({
+// //     source: 'test',
+// //     type: 'each',
+// //     val: 'item in list',
+// //     lineNumber: 2,
+// //     children: [
+// //       { name: "li", type: "tag", assignment: true, assignment_val: "item", lineNumber: 4 }
+// //     ]
+// //   }, [ 'var list = ["item1", "item2"]' ]), "<li>item1</li>\n<li>item2</li>", "Should return 2 HTML list item elements")
+
+// // tap.same(
+// //   each({
+// //     source: 'test',
+// //     type: 'each',
+// //     val: 'item in list',
+// //     lineNumber: 2,
+// //     children: [
+// //       {
+// //         name: "p", type: "tag", lineNumber: 4,
+// //         state: 'NESTED',
+// //         children: [{ name: 'span', type: 'tag', assignment: true, assignment_val: "item" }]
+// //       }
+// //     ]
+// //   }, [ 'var list = ["item1", "item2"]' ]), "<p><span>item1</span></p>\n<p><span>item2</span></p>", "Should return 2 HTML paragraph elements with a span")

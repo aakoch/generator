@@ -1,0 +1,359 @@
+[
+  {
+    "source": "../../../adamkoch.com/src/templates/animation.pug",
+    "type": "pug_keyword",
+    "name": "block",
+    "val": "variables",
+    "lineNumber": 1
+  },
+  {
+    "source": "../../../adamkoch.com/src/templates/animation.pug",
+    "type": "pug_keyword",
+    "name": "doctype",
+    "val": "html",
+    "lineNumber": 2
+  },
+  {
+    "source": "../../../adamkoch.com/src/templates/animation.pug",
+    "name": "html",
+    "type": "tag",
+    "classes": [
+      "no-js"
+    ],
+    "attrs": [
+      "lang=\"en\""
+    ],
+    "lineNumber": 3,
+    "children": [
+      {
+        "source": "../../../adamkoch.com/src/templates/animation.pug",
+        "name": "head",
+        "type": "tag",
+        "lineNumber": 5,
+        "children": [
+          {
+            "source": "../../../adamkoch.com/src/templates/animation.pug",
+            "type": "text",
+            "name": "include",
+            "val": "import { createApp } from \"vue\";\nimport App from \"../components/landing\";\nimport 'bootstrap'\nimport '@fortawesome/fontawesome-free/css/all.css'\n\nconst landing = createApp(App)\nlanding.mount('#landing-app')",
+            "lineNumber": 6,
+            "target": "../../../adamkoch.com/src/js/landing.js"
+          },
+          {
+            "source": "../../../adamkoch.com/src/templates/animation.pug",
+            "type": "pug_keyword",
+            "name": "block",
+            "val": "head",
+            "lineNumber": 8
+          },
+          {
+            "source": "../../../adamkoch.com/src/templates/animation.pug",
+            "name": "style",
+            "type": "tag",
+            "attrs": [
+              "type=\"text/scss\""
+            ],
+            "lineNumber": 10,
+            "children": [
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "$primary: #406275;",
+                "lineNumber": 11
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "div.date {",
+                "lineNumber": 12,
+                "children": [
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "margin-bottom: 10px;",
+                    "lineNumber": 13
+                  }
+                ]
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "}",
+                "lineNumber": 14
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "a {",
+                "lineNumber": 15,
+                "children": [
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "cursor: pointer;",
+                    "lineNumber": 16
+                  }
+                ]
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "}",
+                "lineNumber": 17
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "code {",
+                "lineNumber": 18,
+                "children": [
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "white-space: pre;",
+                    "lineNumber": 19
+                  }
+                ]
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "}",
+                "lineNumber": 20
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": ".linkies {",
+                "lineNumber": 22,
+                "children": [
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "&:hover {",
+                    "lineNumber": 23,
+                    "children": [
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": ".fa-angle-double-right {",
+                        "lineNumber": 24,
+                        "children": [
+                          {
+                            "source": "../../../adamkoch.com/src/templates/animation.pug",
+                            "type": "text",
+                            "val": "animation: moveright .5s infinite;",
+                            "lineNumber": 25
+                          }
+                        ]
+                      },
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": "}",
+                        "lineNumber": 26
+                      },
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": ".fa-angle-double-left {",
+                        "lineNumber": 27,
+                        "children": [
+                          {
+                            "source": "../../../adamkoch.com/src/templates/animation.pug",
+                            "type": "text",
+                            "val": "animation: moveleft .5s infinite;",
+                            "lineNumber": 28
+                          }
+                        ]
+                      },
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": "}",
+                        "lineNumber": 29
+                      }
+                    ]
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "}",
+                    "lineNumber": 30
+                  }
+                ]
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "}",
+                "lineNumber": 31
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "@keyframes moveright {",
+                "lineNumber": 33,
+                "children": [
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "from {",
+                    "lineNumber": 34,
+                    "children": [
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": "transform: translateX(0);",
+                        "lineNumber": 35
+                      }
+                    ]
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "}",
+                    "lineNumber": 36
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "to {",
+                    "lineNumber": 38,
+                    "children": [
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": "transform: translateX(10px);",
+                        "lineNumber": 39
+                      }
+                    ]
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "}",
+                    "lineNumber": 40
+                  }
+                ]
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "}",
+                "lineNumber": 41
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "@keyframes moveleft {",
+                "lineNumber": 43,
+                "children": [
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "from {",
+                    "lineNumber": 44,
+                    "children": [
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": "transform: translateX(0);",
+                        "lineNumber": 45
+                      }
+                    ]
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "}",
+                    "lineNumber": 46
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "to {",
+                    "lineNumber": 48,
+                    "children": [
+                      {
+                        "source": "../../../adamkoch.com/src/templates/animation.pug",
+                        "type": "text",
+                        "val": "transform: translateX(-10px);",
+                        "lineNumber": 49
+                      }
+                    ]
+                  },
+                  {
+                    "source": "../../../adamkoch.com/src/templates/animation.pug",
+                    "type": "text",
+                    "val": "}",
+                    "lineNumber": 50
+                  }
+                ]
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "text",
+                "val": "}",
+                "lineNumber": 51
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "source": "../../../adamkoch.com/src/templates/animation.pug",
+        "name": "body",
+        "type": "tag",
+        "lineNumber": 53,
+        "children": [
+          {
+            "type": "include",
+            "name": "../../../adamkoch.com/src/templates/pageheader.pug",
+            "val": "pageheader",
+            "lineNumber": 54,
+            "src": "../../../adamkoch.com/src/templates/animation.pug"
+          },
+          {
+            "source": "../../../adamkoch.com/src/templates/animation.pug",
+            "type": "tag",
+            "classes": [
+              "container"
+            ],
+            "lineNumber": 56,
+            "children": [
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "name": "h1",
+                "type": "tag",
+                "val": "#{title}",
+                "lineNumber": 57
+              },
+              {
+                "source": "../../../adamkoch.com/src/templates/animation.pug",
+                "type": "pug_keyword",
+                "name": "block",
+                "val": "body",
+                "lineNumber": 58
+              }
+            ]
+          },
+          {
+            "type": "include",
+            "name": "../../../adamkoch.com/src/templates/footer.pug",
+            "val": "footer",
+            "lineNumber": 60,
+            "src": "../../../adamkoch.com/src/templates/animation.pug"
+          },
+          {
+            "source": "../../../adamkoch.com/src/templates/animation.pug",
+            "type": "pug_keyword",
+            "name": "block",
+            "val": "body_scripts",
+            "lineNumber": 62
+          }
+        ]
+      }
+    ]
+  }
+]

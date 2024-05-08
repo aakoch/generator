@@ -1,0 +1,24 @@
+import tap from 'tap'
+import assignmentModuleFunction from '../src/assignment.js'
+
+tap.same(
+  assignmentModuleFunction({ name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 5 },
+    { x: 10 })( Object.values({ x: 10 })),
+  "<li>10</li>")
+
+  let variables = { item: 'item2' }
+  tap.same(
+    assignmentModuleFunction({ name: 'span', type: 'tag', assignment: true, assignment_val: 'item' }, variables)(Object.values(variables)),
+    '<span>item2</span>')
+
+  // tap.same(
+  //   assignmentModuleFunction(
+  //       {
+  //         type: "unbuf_code", val: "while (x < 6)", lineNumber: 3,
+  //         children: [
+  //           { type: "unbuf_code", val: "x++;", lineNumber: 4 },
+  //           { name: "li", type: "tag", assignment: true, assignment_val: "x", lineNumber: 5 }
+  //         ]
+  //       },
+  //     { x: 1 })( Object.values({ x: 1 })),
+  //   "<li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li>", "Testing code as a child")
