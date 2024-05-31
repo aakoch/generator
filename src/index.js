@@ -1,6 +1,4 @@
 import debugFunc from 'debug'
-// import escapeHtml from 'escape-html'
-const debug = debugFunc('generator')
 // import eachFunc from './each.js'
 // import whileFunc from './while.js'
 // import processCodeBlock from './processCodeBlock.js'
@@ -8,10 +6,11 @@ const debug = debugFunc('generator')
 // import evaluateUnbufferedCode from './unbuf_code.js'
 import assert from 'assert'
 // import { run } from './run.js'
-
 // import { createMixin } from './mixin.js'
 // import { create } from 'domain'
-import {compile as tagCompile, run as tagRun} from "./tag_old.js"
+import {inspect} from 'util'
+// import escapeHtml from 'escape-html'
+const debug = debugFunc('generator')
 
 // const MixinStack = class {
 //   add(name, obj) {
@@ -29,14 +28,18 @@ class Generator {
   constructor() {}
 
   compile(code, variables, arrayName = 'returnArray') {
-    let functionString = 'return ' + code;
-    // if (variables === undefined || Object.keys(variables).length > 0) { //  || Object.empty(variables)) {
-    //   functionString = 'return ' + code;
-    // }
-    // else {
-      // functionString = 'let ' + arrayName + ' = []; ' + code  + '; return ' + arrayName + '.join("")';
-    // }
+    assert(typeof code === 'string')
+    debug('entering compile with code="' + inspect(code, false, 5) + '" variables="' + variables)
+    let functionString;
+    if (variables === undefined || Object.keys(variables).length > 0) { //  || Object.empty(variables)) {
+      functionString = 'return ' + code;
+    }
+    else {
+      functionString = 'let ' + arrayName + ' = []; ' + code  + '; return ' + arrayName + '.join("")';
+    }
+    debug('functionString="' + functionString)
     const func = Function(Object.keys(variables ?? {}), functionString)
+    debug('compile: returning ', func.toString())
     return func;
   }
 
@@ -217,38 +220,10 @@ class Generator {
       }
     },
     tag: (obj, variables) => {
+      debug('tag: ', obj)
 
-      function handleChildren(children) {
-        // const walk2 = this.walk.bind(this)
-        // return () => children.map(child => walk2(child, variables)).join('')
-      }
+      return '<' + obj.name + '>';
 
-      function prepare(context, json, variables = {}) {
-        return tagRun(tagCompile(context, json, {}, handleChildren), variables).join('')
-      }
-
-      return prepare({}, obj)
-      
-      // debug('tag: obj=', obj)
-      // let attrs = this.functions.if_attrs(obj)
-      // if (attrs.length) {
-      //   attrs = ' ' + attrs.join(' ').trim()
-      // }
-      // if (!obj.hasOwnProperty('name')) {
-      //   return [
-      //     '<'.concat(obj.name ?? 'div', attrs, '>', this.functions.if_assignment(obj, variables), obj.hasOwnProperty('val') ? ' ' + obj.val : ''),
-      //     `</${obj.name ?? 'div'}>`,
-      //   ]
-      // } else if (this.isSelfClosingTag(obj.name)) {
-      //   return '<'.concat(obj.name ?? 'div', attrs, '>', this.functions.if_assignment(obj, variables), obj.hasOwnProperty('val') ? ' ' + obj.val : '') // + '/>'
-      // } else if (obj.hasOwnProperty('assignment')) {
-      //   return this.functions.assignment(obj, variables)
-      // } else {
-      //   return [
-      //     '<'.concat(obj.name ?? 'div', attrs, '>', this.functions.if_assignment(obj, variables), obj.hasOwnProperty('val') ? '' + obj.val : ''),
-      //     `</${obj.name ?? 'div'}>`,
-      //   ]
-      // }
     },
     tag_with_multiline_attrs: obj => [(obj.name ?? '') + this.functions.if_id(obj) + this.functions.if_classes(obj) + this.functions.attrs_start(obj)],
     text: obj => [obj.val, '\n'],
@@ -310,22 +285,41 @@ class Generator {
   // }
 
   walk (obj, variables) {
-    // debug('Entering walk...')
+    debug('Entering walk...')
 
     let output = ''
+    let child = ''
     if (Array.isArray(obj)) {
+      debug('obj is an array')
       obj.forEach(node => {
         output += this.walk(node, variables)
       })
       // if (output.includes('undefined')) {
       //   throw new Error(output + '\n' + JSON.stringify(obj, null, '  '));
       // }
-    } else {
-      output += this.visit(obj, variables)
+    } else if (obj.hasOwnProperty('children')) {
+      debug('obj has children')
+      obj.children.forEach(node => {
+        child += this.walk(node, variables)
+      })
+    }
+
+    const outputOfUnknownType = this.visit(obj, variables);
+    
+    if (typeof outputOfUnknownType === 'string') {
+      output += '\n' + outputOfUnknownType
+    }
+    else if (typeof outputOfUnknownType === 'undefined') {
+      output += ''
+    }
+    else {
+      debug('type of outputOfUnknownType=', typeof outputOfUnknownType)
+      output += outputOfUnknownType()
+    }
       // if (output.includes('undefined')) {
       //   throw new Error(output + '\n' + JSON.stringify(obj, null, '  '));
       // }
-    }
+    assert(typeof output === 'string')
     return output
   }
 
@@ -333,75 +327,85 @@ class Generator {
   visit(obj, variables) {
     assert.ok(obj)
     debug('Entering visit... obj=', obj, ', variables=', variables)
-    let output = ''
+    let output
     debug('obj.type=' + obj.type)
     if (typeof obj.type === 'undefined') {
-      debug('obj=', obj)
+      debug('object type is undefined. obj=', obj)
     } else {
-      debug('obj=', obj)
+      debug('looking for a generator to handle obj.type=', obj.type)
       if (!this.hasOwnProperty(obj.type) && !this.constructor.functions.hasOwnProperty(obj.type)) {
         throw new Error('No method to handle type "' + obj.type + '"')
       }
 
-      if (obj.type === 'comment') {
-        output = ''
-      } else if (obj.type === 'code' || obj.type === 'unbuf_code') {
-        //this.constructor.codeResults[obj.name] = this.constructor.functions.code.call(this, obj, variables)
-      } else if (obj.type === 'unbuf_code_block') {
-        // Without a block, the element is accepted and no code is generated
-        debug('obj=', obj)
-        if (obj.hasOwnProperty('children')) {
-          obj.children.forEach(obj2 => {
-            debug('obj.name=', obj.name)
-            debug('obj2=', obj2)
-            this.constructor.codeResults[obj.name] = this.constructor.functions.code.call(this, obj2, variables)
-          })
-        }
-      } else if (obj.hasOwnProperty('assignment')) {
-        output = this.constructor.functions.assignment.call({}, obj, variables)
-      } else {
-        debug('calling functions.' + obj.type + ', with variables=', variables)
-
-
-        let result
-        if (this.hasOwnProperty(obj.type)) {
-          result = this[obj.type](obj, variables)
-        }
-        else {
-          result = this.constructor.functions[obj.type].call({}, obj, variables)
-        }
-
-        debug('result=', result)
-
-        if (Array.isArray(result)) {
-          if (result.length == 2) {
-            output = result[0]
-            if (obj.hasOwnProperty('children')) {
-              for (let index = 0; index < obj.children.length; index++) {
-                const el = obj.children[index];
-                debug('variables=', variables)
-                output += this.walk(el, variables)
-              }
-              // if (output.includes('undefined')) {
-              //   throw new Error(output + '\n' + JSON.stringify(obj, null, '  '));
-              // }
-            }
-            output += result[1] ?? ''
-          } else {
-            console.error('result was not of expected length of 2 but instead = ' + result.length)
-          }
-        } else if (typeof result === 'string') {
-          output = result
-          if (obj.hasOwnProperty('children')) {
-            obj.children.forEach(el => {
-              output += this.walk(el, variables)
-            })
-            // if (output.includes('undefined')) {
-            //   throw new Error(output + '\n' + JSON.stringify(obj, null, '  '));
-            // }
-          }
-        }
+      debug('this.constructor.functions[obj.type]=', this.constructor.functions[obj.type]);
+      let currentlyNotAFunction = this.constructor.functions[obj.type](obj, variables)
+      debug('currentlyNotAFunction=', currentlyNotAFunction)
+      if (typeof currentlyNotAFunction === 'string') {
+        output = this.compile('"' + currentlyNotAFunction + '"');
       }
+      else {
+        output = currentlyNotAFunction()
+      }
+
+    //   if (obj.type === 'comment') {
+    //     output = ''
+    //   } else if (obj.type === 'code' || obj.type === 'unbuf_code') {
+    //     //this.constructor.codeResults[obj.name] = this.constructor.functions.code.call(this, obj, variables)
+    //   } else if (obj.type === 'unbuf_code_block') {
+    //     // Without a block, the element is accepted and no code is generated
+    //     debug('obj=', obj)
+    //     if (obj.hasOwnProperty('children')) {
+    //       obj.children.forEach(obj2 => {
+    //         debug('obj.name=', obj.name)
+    //         debug('obj2=', obj2)
+    //         this.constructor.codeResults[obj.name] = this.constructor.functions.code.call(this, obj2, variables)
+    //       })
+    //     }
+    //   } else if (obj.hasOwnProperty('assignment')) {
+    //     output = this.constructor.functions.assignment.call({}, obj, variables)
+    //   } else {
+    //     debug('calling functions.' + obj.type + ', with variables=', variables)
+
+
+    //     let result
+    //     if (this.hasOwnProperty(obj.type)) {
+    //       result = this[obj.type](obj, variables)
+    //     }
+    //     else {
+    //       result = this.constructor.functions[obj.type].call({}, obj, variables)
+    //     }
+
+    //     debug('result=', result)
+
+    //     if (Array.isArray(result)) {
+    //       if (result.length == 2) {
+    //         output = result[0]
+    //         if (obj.hasOwnProperty('children')) {
+    //           for (let index = 0; index < obj.children.length; index++) {
+    //             const el = obj.children[index];
+    //             debug('variables=', variables)
+    //             output += this.walk(el, variables)
+    //           }
+    //           // if (output.includes('undefined')) {
+    //           //   throw new Error(output + '\n' + JSON.stringify(obj, null, '  '));
+    //           // }
+    //         }
+    //         output += result[1] ?? ''
+    //       } else {
+    //         console.error('result was not of expected length of 2 but instead = ' + result.length)
+    //       }
+    //     } else if (typeof result === 'string') {
+    //       output = result
+    //       if (obj.hasOwnProperty('children')) {
+    //         obj.children.forEach(el => {
+    //           output += this.walk(el, variables)
+    //         })
+    //         // if (output.includes('undefined')) {
+    //         //   throw new Error(output + '\n' + JSON.stringify(obj, null, '  '));
+    //         // }
+    //       }
+    //     }
+    //   }
     }
 
     return output
@@ -431,19 +435,4 @@ class Generator {
 
 }
 
-
-
-// Export the class
 export default Generator;
-
-
-// Export the function
-// export { fromObject };
-
-// const generator = new Generator()
-// export default {
-//   // fromString: str => generator.fromString(str),
-//   // fromObject: obj => generator.fromObject(obj),
-//   Generator
-// }
-

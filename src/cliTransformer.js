@@ -1,20 +1,18 @@
-import { fileURLToPath } from 'url';
-import fs from 'fs'
-import path from 'path';
+import {fileURLToPath} from 'url';
 import debugFunc from 'debug'
-const debug = debugFunc('generator')
-import chalk from 'chalk';
-const __filename = fileURLToPath(import.meta.url);
 import Generator from './index.js'
-import { parseArguments } from '@foo-dog/utils'
 import stream from 'stream'
-import { inspect } from 'util';
+import {inspect} from 'util';
+
+const debug = debugFunc('generator.cliTransformer')
+const __filename = fileURLToPath(import.meta.url);
 
 const generator = new Generator()
 
 class CliTransformer extends stream.Transform {
   constructor(stdin) {
     super({ decodeStrings: true, encoding: 'utf-8', objectMode: true })
+    debug('new CliTransformer created');
     this.stdin = stdin
   }
   stack = ''
@@ -33,10 +31,13 @@ class CliTransformer extends stream.Transform {
           let obj
           try {
 
-            let func = Function('"use strict"; return ' + str + ';');
-            obj = func()
+            // let func = Function('"use strict"; return ' + str + ';');
+            // obj = func()
+            // debug('obj=', obj)
+            // debug('generator=', generator)
 
-            debug('generator=', generator)
+            obj = JSON.parse(str);
+
             const returnObj = generator.fromObject(obj) || `<nothing returned: obj=${inspect(obj)}>`;
             debug('returnObj=', returnObj)
             this.push(returnObj + '\n')
@@ -46,6 +47,7 @@ class CliTransformer extends stream.Transform {
             callback()
           }
           catch (e) {
+            console.error(e)
             if (e.name === 'SyntaxError') {
               console.error("Could not parse " + str)
             }

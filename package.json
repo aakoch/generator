@@ -2,7 +2,8 @@
   "name": "generator",
   "version": "0.1.0",
   "description": "HTML Generator for Foo-Dog project",
-  "source": "src/index.js",
+  "main": "index.js",
+  "source": "build/main/index.js",
   "directories": {
     "test": "test"
   },
