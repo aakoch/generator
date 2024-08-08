@@ -5,7 +5,7 @@ import debugFunc from 'debug'
 const debug = debugFunc('generator')
 import chalk from 'chalk';
 const __filename = fileURLToPath(import.meta.url);
-// import generator from './index.js'
+// import generator from './index.ts'
 import CliTransformer from './cliTransformer.js'
 import { parseArguments } from '@foo-dog/utils'
 import stream from 'stream'

@@ -1,5 +1,5 @@
 import tap from 'tap'
-import generator from '../src/index.js'
+import generator from '../src/index.ts'
 import evaluateUnbufferedCode from '../src/unbuf_code.js'
 
 // tap.test('es2015-attr', t => {

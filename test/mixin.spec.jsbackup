@@ -8,7 +8,7 @@ import path from 'path'
 import { testObj } from './fixtures.js'
 const root = simpleProjectRootDir()
 
-import generator from '../src/index.js'
+import generator from '../src/index.ts'
 // import {generate} from '../src/mixin.js'
 
 /*

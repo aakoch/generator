@@ -3,7 +3,7 @@ import tap from 'tap'
 // import fs from 'fs'
 // import path from 'path'
 // const root = simpleProjectRootDir()
-import generator from '../src/index.js'
+import generator from '../src/index.ts'
 import debugFunc from 'debug'
 const debug = debugFunc('generator:test:basic')
 
